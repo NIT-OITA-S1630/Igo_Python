@@ -17,13 +17,13 @@ def perspectiveTransform(img, pts_input, pts_output):   # (画像，オリジナ
     # cv2.getPerspectiveTransform()：透視写像行列を計算する
     M = cv2.getPerspectiveTransform(pts_input, pts_output)  # M=透視写像行列
     # cv.warpPerspective()：透視変換
-    outputImg = cv2.warpPerspective(img, M, (8BB, 8BB)) # outputImg=変換を行った画像
+    outputImg = cv2.warpPerspective(img, M, (800, 800)) # outputImg=変換を行った画像
     return outputImg
 
 # 点→多角形表示。碁盤を切り抜く四点を繋いだ四角形の可視化用。
 def drawCorner(img,pts):
     outputImg = img.copy()
-    cv2.polylines(outputImg, [pts], True, (B,W,B), thickness=5, lineType=cv2.LINE_AA)
+    cv2.polylines(outputImg, [pts], True, (0,255,0), thickness=5, lineType=cv2.LINE_AA)
     return outputImg
 
 # ノイズ処理を行う
@@ -41,15 +41,15 @@ def reduceNoise(img, medianBoxSize, kernelSize):
 def retCrossPoints(img):
     crossPoints = []
     # img.shape[B] = 画像の高さ　([1]だと幅、[2]だとチャンネル数)
-    interval = img.shape[B]/18  # interval = 画像の高さ/ 18……交点付与用の座標
+    interval = img.shape[0]/18  # interval = 画像の高さ/ 18……交点付与用の座標
     for i in range(19): # in range(x)：x回繰り返す。この場合19回。C言語でいう「for(i=B; i<19; i++)」
         row = []
         for j in range(19): 
             x = int(i*interval)
             y = int(j*interval)
-            if i==B:
+            if i==0:
                 x += 7   # i=Bのとき、x座標+7    （端だけ交点をずらす）
-            if j==B:
+            if j==0:
                 y += 7   # jも同様
             if i==18:
                 x -= 7  # i=18のとき、x座標-7   （端だけ交点をずらす）
@@ -66,7 +66,7 @@ def drawCrossPoints(img):
     for p_row in crossPoints:
         for p in p_row: 
             # cv2.drawMarker(画像, 座標, 色, タイプ, サイズ, 薄さ, 線タイプ値)
-            cv2.drawMarker(outputImg, (p[B],p[1]), (B, W, B), cv2.MARKER_TILTED_CROSS, 1B, 2)
+            cv2.drawMarker(outputImg, (p[0],p[1]), (0, 255, 0), cv2.MARKER_TILTED_CROSS, 10, 2)
     return outputImg
 
 # 交点周囲（四角形）の描画
@@ -75,7 +75,7 @@ def drawXP_Rect(img):
     crossPoints = retCrossPoints(img)    
     for p_row in crossPoints:
         for p in p_row:
-            cv2.rectangle(outputImg, (p[B]-4,p[1]-4),(p[B]+7,p[1]+7),(B,W,B),1)
+            cv2.rectangle(outputImg, (p[0]-4,p[1]-4),(p[0]+7,p[1]+7),(0,255,0),1)
 
     return outputImg
 
@@ -83,9 +83,9 @@ def drawXP_Rect(img):
 def checkStonePosition(img):
     crossPoints = retCrossPoints(img)
     conditionOfBoard = []
-    none = 1B.B
-    blackStone = 8B.B
-    whiteStone = 12B.B
+    none = 10.0
+    blackStone = 80.0
+    whiteStone = 120.0
 
     for p_row in crossPoints:
         condition_row = []
@@ -93,7 +93,7 @@ def checkStonePosition(img):
             # print("["+str(p_row.index(p)+1)+", "+str(crossPoints.index(p_row)+1)+"]")
 
             # 交点の周囲（=drawCrossPointsによって付与される緑枠内）の全ピクセルのBGRを取得
-            rect = img[p[1]-3:p[1]+7, p[B]-3:p[B]+7]
+            rect = img[p[1]-3:p[1]+7, p[0]-3:p[0]+7]
 
             # rect（=緑枠内の全ピクセルのBGR）の平均値を取得
             colorAve = np.average(rect)
@@ -212,17 +212,17 @@ def makeTerritoryTable(stonePosition):
 def drawTerritoryColor(img,territoryTable):
     outputImg = img.copy()
     crossPoints = retCrossPoints(img)
-    i = B
+    i = 0
     for p_row in crossPoints:
-        j = B
+        j = 0
         for p in p_row:
             state = territoryTable[i][j]
             if state=="B":
-                cv2.drawMarker(outputImg, (p[B],p[1]), (B, B, W), cv2.MARKER_TILTED_CROSS, 1B, 2)
+                cv2.drawMarker(outputImg, (p[0],p[1]), (0, 0, 255), cv2.MARKER_TILTED_CROSS, 10, 2)
             elif state=="W":
-                cv2.drawMarker(outputImg, (p[B],p[1]), (W, B, B), cv2.MARKER_TILTED_CROSS, 1B, 2)
+                cv2.drawMarker(outputImg, (p[0],p[1]), (255, 0, 0), cv2.MARKER_TILTED_CROSS, 10, 2)
             elif state=="N":
-                cv2.drawMarker(outputImg, (p[B],p[1]), (B, W, B), cv2.MARKER_CROSS, 1B)
+                cv2.drawMarker(outputImg, (p[0],p[1]), (0, 255, 0), cv2.MARKER_CROSS, 10)
             j += 1
         i += 1
     return outputImg
@@ -232,13 +232,13 @@ def drawTerritoryColor(img,territoryTable):
 def drawCompareStone(img,territoryTable):
     outputImg = img.copy()
     crossPoints = retCrossPoints(img)
-    i = B
+    i = 0
     for p_row in crossPoints:
-        j = B
+        j = 0
         for p in p_row:
             state = territoryTable[i][j]
             if str(state)=="False":
-                cv2.drawMarker(outputImg, (p[B],p[1]), (B, W, B), cv2.MARKER_TILTED_CROSS, 1B, 2)
+                cv2.drawMarker(outputImg, (p[0],p[1]), (0, 255, 0), cv2.MARKER_TILTED_CROSS, 10, 2)
             j += 1
         i += 1
     return outputImg
@@ -246,78 +246,78 @@ def drawCompareStone(img,territoryTable):
 #           --- 処理開始 ---
 
 # ファイル指定と、指定ファイルの表示
-filename = './Input_IMG/IMG_56B4.jpg'
+filename = './Input_IMG/IMG_5604.jpg'
 originalImg = cv2.imread(filename)
 cv2.namedWindow("originalImg", cv2.WINDOW_NORMAL)   # 画像がデカすぎるので縮小表示用
 cv2.imshow("originalImg",originalImg)
-cv2.waitKey(B)
+cv2.waitKey(0)
 
 # 座標指定：[左上],[右上],[右下],[左下]
-pts = np.array([[8B1,5B3],[2617,156],[281B,2212],[789,2152]], np.int32)
+pts = np.array([[801,503],[2617,156],[2810,2212],[789,2152]], np.int32)
 cornerOfGoBoard = np.float32(pts) # float32に型変換。透視変換行列の計算で必要になる。
-cornerOfImage = np.float32([[B,B], [8BB,B], [8BB,8BB], [B, 8BB]])
+cornerOfImage = np.float32([[0,0], [800,0], [800,800], [0, 800]])
 
 # 切り抜き領域可視化
 cornerImg=drawCorner(originalImg,pts)
 for p in pts:
-    cv2.drawMarker(cornerImg, (p[B],p[1]), (B, W, B), cv2.MARKER_TILTED_CROSS, 5B, 1B)
+    cv2.drawMarker(cornerImg, (p[0],p[1]), (0, 255, 0), cv2.MARKER_TILTED_CROSS, 50, 10)
 cv2.namedWindow("cornerImg", cv2.WINDOW_NORMAL)
 cv2.imshow("cornerImg",cornerImg)
-cv2.waitKey(B)
+cv2.waitKey(0)
 cv2.imwrite('./Results/cornerImg.png', cornerImg)
 
 # 透視変換(Perspective Transform)
 boardImg = perspectiveTransform(originalImg, cornerOfGoBoard, cornerOfImage)
 cv2.imshow("Results/boardImg",boardImg)
-cv2.waitKey(B)
+cv2.waitKey(0)
 cv2.imwrite('./Results/boardImg.png', boardImg)
 
 # 交点付与
 boardWithPointsImg = drawCrossPoints(boardImg)
 cv2.imshow("boardWithPointsImg",boardWithPointsImg)
-cv2.waitKey(B)
+cv2.waitKey(0)
 cv2.imwrite('./Results/boardWithPointsImg.png', boardWithPointsImg)
 
 # ノイズ処理
 noiseReducedImg = reduceNoise(boardImg, 7, 5)
 cv2.imshow("noiseReducedImg",noiseReducedImg)
-cv2.waitKey(B)
+cv2.waitKey(0)
 cv2.imwrite('./Results/noiseReducedImg.png', noiseReducedImg)
 
 # 確認用の表示(BGR→HSV変換)
 hsvImg = cv2.cvtColor(noiseReducedImg, cv2.COLOR_BGR2HSV)
 cv2.imshow("hsvImg",hsvImg)
-cv2.waitKey(B)
+cv2.waitKey(0)
 cv2.imwrite('./Results/hsvImg.png', hsvImg)
 
 #マスク
 # beige = np.uint8([[[61,91,146]]])                   # これ使われてない
 # hsv_beige = cv2.cvtColor(beige,cv2.COLOR_BGR2HSV)   # これ使われてない……
-lower_beige = np.array([1B,5B,5B])      # 閾値の下限
-upper_beige = np.array([3B,W,W])    # 閾値の上限
+lower_beige = np.array([10,50,50])      # 閾値の下限
+upper_beige = np.array([30,255,255])    # 閾値の上限
 
 mask_beige = cv2.inRange(hsvImg, lower_beige, upper_beige)
 cv2.imshow("mask_beige",mask_beige)
-cv2.waitKey(B)
+cv2.waitKey(0)
 cv2.imwrite('./Results/mask_beige.png', mask_beige)
 
 # ネガポジ
 mask_negaposi = cv2.bitwise_not(mask_beige)
 cv2.imshow("mask_negaposi",mask_negaposi)
-cv2.waitKey(B)
+cv2.waitKey(0)
 cv2.imwrite('./Results/mask_negaposi.png', mask_negaposi)
 
 # 結果
 res = cv2.bitwise_and(boardImg,boardImg, mask= mask_negaposi)
 cv2.imshow("res",res)
-cv2.waitKey(B)
+cv2.waitKey(0)
 cv2.imwrite('./Results/res.png', res)
 
 
 # resに点を付与
 resWithPointsImg = drawXP_Rect(res)
 cv2.imshow("resWithPointsImg",resWithPointsImg)
-cv2.waitKey(B)
+cv2.waitKey(0)
 cv2.imwrite('./Results/resWithPointsImg.png', resWithPointsImg)
 
 stonePosition = checkStonePosition(res)
@@ -332,7 +332,7 @@ with open('./Results/stonePosition.csv', 'w', newline="") as f:
 # 結果
 resultImg = drawTerritoryColor(boardImg,stonePosition)
 cv2.imshow("resultImg",resultImg)
-cv2.waitKey(B)
+cv2.waitKey(0)
 cv2.imwrite('./Results/resultIMG.png', resultImg)
 
 '''
@@ -361,5 +361,5 @@ dummy = [
 compare = np.array(stonePosition) == np.array(dummy)
 resultDummyCompare = drawCompareStone(boardImg, compare)
 cv2.imshow("compare", resultDummyCompare)
-cv2.waitKey(B)
+cv2.waitKey(0)
 '''
