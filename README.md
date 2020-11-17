@@ -16,4 +16,4 @@
         - https://qiita.com/hatt_takumi/items/47a46d5e85223a41afa4
 
 - HTTPSからSSH接続に切り替え。変更確認用の試し書き！
-- testing
+- 試しに変更
