@@ -17,3 +17,5 @@
         - http://asdm.hatenablog.com/entry/2016/07/26/181700
     - 領域検出（Contour_Detectで実装させてみたやつ。今は後回し。余裕があれば実装したい）
         - https://qiita.com/hatt_takumi/items/47a46d5e85223a41afa4
+
+- 変更確認用
