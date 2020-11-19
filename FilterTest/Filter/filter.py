@@ -1,3 +1,9 @@
+import cv2
+import numpy as np
+import os
+if os.name == 'nt': os.system('cls')
+else : os.system("clear")
+
 # ノイズ処理を行う
 def reduceNoise(img, medianBoxSize, kernelSize):
     # cv2.medianBlur()：メディアンフィルタ
@@ -10,8 +16,16 @@ def reduceNoise(img, medianBoxSize, kernelSize):
     return outputImg
 
 
-# ノイズ処理
-noiseReducedImg = reduceNoise(boardImg, 7, 5)
-cv2.imshow("noiseReducedImg",noiseReducedImg)
+img = cv2.imread("./Image.png")
+img_GRAY = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+cv2.imshow("GRAY",img_GRAY)
 cv2.waitKey(0)
-cv2.imwrite('./Results/noiseReducedImg.png', noiseReducedImg)
+cv2.imwrite('./GRAY.png', img_GRAY)
+
+print("END")
+
+# ノイズ処理
+# noiseReducedImg = reduceNoise(boardImg, 7, 5)
+# cv2.imshow("noiseReducedImg",noiseReducedImg)
+# cv2.waitKey(0)
+# cv2.imwrite('./Results/noiseReducedImg.png', noiseReducedImg)
