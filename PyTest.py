@@ -335,6 +335,8 @@ cv2.imshow("resultImg",resultImg)
 cv2.waitKey(0)
 cv2.imwrite('./Results/resultIMG.png', resultImg)
 
+print("END")
+
 '''
 # 偽の碁盤情報を用意、stonePositionと比較
 dummy = [
