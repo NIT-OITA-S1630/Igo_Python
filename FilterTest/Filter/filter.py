@@ -15,10 +15,11 @@ def reduceNoise(img, medianBoxSize, kernelSize):
     outputImg = cv2.morphologyEx(img, cv2.MORPH_CLOSE, kernel)
     return outputImg
 
+print("START")
 
 img = cv2.imread("./Image.png")
-img_GRAY = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
-cv2.imshow("GRAY",img_GRAY)
+img_GRAY = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+cv2.imshow("img_GRAY",img_GRAY)
 cv2.waitKey(0)
 cv2.imwrite('./GRAY.png', img_GRAY)
 
