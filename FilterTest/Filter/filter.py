@@ -23,10 +23,22 @@ cv2.imshow("img_GRAY",img_GRAY)
 cv2.waitKey(0)
 cv2.imwrite('./GRAY.png', img_GRAY)
 
-print("END")
+BoxSize = 29 # フィルタ用のサイズ指定．奇数のみ．
+
+img_MEDIAN = cv2.medianBlur(img, BoxSize)
+cv2.imshow("img_MEDIAN",img_MEDIAN)
+cv2.waitKey(0)
+cv2.imwrite('./MEDIAN.png', img_MEDIAN)
+
+img_GRAY_MEDIAN = cv2.medianBlur(img_GRAY, BoxSize)
+cv2.imshow("img_GRAY_MEDIAN",img_GRAY_MEDIAN)
+cv2.waitKey(0)
+cv2.imwrite('./GRAY_MEDIAN.png', img_GRAY_MEDIAN)
 
 # ノイズ処理
 # noiseReducedImg = reduceNoise(boardImg, 7, 5)
 # cv2.imshow("noiseReducedImg",noiseReducedImg)
 # cv2.waitKey(0)
 # cv2.imwrite('./Results/noiseReducedImg.png', noiseReducedImg)
+
+print("END")
