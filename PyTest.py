@@ -279,7 +279,7 @@ cv2.waitKey(0)
 cv2.imwrite('./Results/boardWithPointsImg.png', boardWithPointsImg)
 
 # ノイズ処理
-noiseReducedImg = reduceNoise(boardImg, 7, 5)
+noiseReducedImg = reduceNoise(boardImg, 27, 25)
 cv2.imshow("noiseReducedImg",noiseReducedImg)
 cv2.waitKey(0)
 cv2.imwrite('./Results/noiseReducedImg.png', noiseReducedImg)
