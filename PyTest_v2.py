@@ -59,22 +59,22 @@ cv2.imwrite('./Results/hsvImg.png', hsvImg)
 #マスク
 # beige = np.uint8([[[61,91,146]]])                   # これ使われてない
 # hsv_beige = cv2.cvtColor(beige,cv2.COLOR_BGR2HSV)   # これ使われてない……
-lower_beige = np.array([10,50,50])      # 閾値の下限
-upper_beige = np.array([30,255,255])    # 閾値の上限
+lower = np.array([0,0,0])      # 閾値の下限
+upper = np.array([360,100,100])    # 閾値の上限
 
-mask_beige = cv2.inRange(hsvImg, lower_beige, upper_beige)
-cv2.imshow("mask_beige",mask_beige)
+mask = cv2.inRange(hsvImg, lower, upper)
+cv2.imshow("mask",mask)
 cv2.waitKey(0)
-cv2.imwrite('./Results/mask_beige.png', mask_beige)
+cv2.imwrite('./Results/mask.png', mask)
 
-# ネガポジ
-mask_negaposi = cv2.bitwise_not(mask_beige)
-cv2.imshow("mask_negaposi",mask_negaposi)
-cv2.waitKey(0)
-cv2.imwrite('./Results/mask_negaposi.png', mask_negaposi)
+# # ネガポジ
+# mask_negaposi = cv2.bitwise_not(mask)
+# cv2.imshow("mask_negaposi",mask_negaposi)
+# cv2.waitKey(0)
+# cv2.imwrite('./Results/mask_negaposi.png', mask_negaposi)
 
 # 結果
-res = cv2.bitwise_and(boardImg,boardImg, mask= mask_negaposi)
+res = cv2.bitwise_and(boardImg,boardImg, mask= mask)
 cv2.imshow("res",res)
 cv2.waitKey(0)
 cv2.imwrite('./Results/res.png', res)

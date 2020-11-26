@@ -18,8 +18,8 @@ def reduceNoise(img, medianBoxSize, kernelSize):
 
 
 
-im1 = cv2.imread("./Image_1.jpg")
-im2 = cv2.imread("./Image_2.jpg")
+im1 = cv2.imread("./A.png")
+im2 = cv2.imread("./B.png")
 
 im1_GRAY = cv2.cvtColor(im1,cv2.COLOR_BGR2GRAY)
 im2_GRAY = cv2.cvtColor(im2,cv2.COLOR_BGR2GRAY)
