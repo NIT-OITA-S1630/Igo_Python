@@ -103,6 +103,7 @@ cv2.imwrite('./Results/resultIMG.png', resultImg)
 
 print("END")
 
+'''
 
 # 偽の碁盤情報（四隅の情報が違う）を用意、stonePositionと比較
 dummy = [
@@ -132,3 +133,5 @@ compare = np.array(stonePosition) == np.array(dummy)
 resultDummyCompare = MOD.drawCompareStone(boardImg, compare)
 cv2.imshow("compare", resultDummyCompare)
 cv2.waitKey(0)
+
+'''
