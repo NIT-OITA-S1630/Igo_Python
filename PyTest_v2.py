@@ -45,24 +45,41 @@ cv2.waitKey(0)
 cv2.imwrite('./Results/boardWithPointsImg.png', boardWithPointsImg)
 
 # ノイズ処理
-noiseReducedImg = MOD.reduceNoise(boardImg, 7, 5)
+# noiseReducedImg = MOD.reduceNoise(boardImg, 37, 0)
+noiseReducedImg = cv2.medianBlur(boardImg,27)
 cv2.imshow("noiseReducedImg",noiseReducedImg)
 cv2.waitKey(0)
 cv2.imwrite('./Results/noiseReducedImg.png', noiseReducedImg)
 
+# # 確認用の表示(BGR→HSV変換)
+# hsvImg = cv2.cvtColor(noiseReducedImg, cv2.COLOR_BGR2HSV)
+# cv2.imshow("hsvImg",hsvImg)
+# cv2.waitKey(0)
+# cv2.imwrite('./Results/hsvImg.png', hsvImg)
+
 # 確認用の表示(BGR→HSV変換)
-hsvImg = cv2.cvtColor(noiseReducedImg, cv2.COLOR_BGR2HSV)
-cv2.imshow("hsvImg",hsvImg)
+GRAYImg = cv2.cvtColor(noiseReducedImg, cv2.COLOR_BGR2GRAY)
+cv2.imshow("GRAYImg",GRAYImg)
 cv2.waitKey(0)
-cv2.imwrite('./Results/hsvImg.png', hsvImg)
+cv2.imwrite('./Results/GRAYImg.png', GRAYImg)
 
 #マスク
 # beige = np.uint8([[[61,91,146]]])                   # これ使われてない
 # hsv_beige = cv2.cvtColor(beige,cv2.COLOR_BGR2HSV)   # これ使われてない……
-lower = np.array([0,0,0])      # 閾値の下限
-upper = np.array([360,100,100])    # 閾値の上限
+lower_BLACK = np.array([0,0,0])      # 閾値の下限
+upper_BLACK = np.array([360,100,100])    # 閾値の上限
 
-mask = cv2.inRange(hsvImg, lower, upper)
+mask_BLACK = cv2.inRange(GRAYImg, 0, 50)    # 黒石抽出
+cv2.imshow("mask_BLACK",mask_BLACK)
+cv2.waitKey(0)
+cv2.imwrite('./Results/mask_BLACK.png', mask_BLACK)
+
+mask_WHITE = cv2.inRange(GRAYImg, 160, 255)    # 黒石抽出
+cv2.imshow("mask_WHITE",mask_WHITE)
+cv2.waitKey(0)
+cv2.imwrite('./Results/mask_WHITE.png', mask_WHITE)
+
+mask = cv2.bitwise_or(mask_BLACK,mask_WHITE)
 cv2.imshow("mask",mask)
 cv2.waitKey(0)
 cv2.imwrite('./Results/mask.png', mask)
