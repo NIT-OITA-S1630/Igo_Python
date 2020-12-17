@@ -110,6 +110,12 @@ with open('./Results/stonePosition.csv', 'w', newline="") as f:
     writer.writerows(stonePosition)
 
 # 結果
+resultWithNoiceReducedImg = MOD.drawTerritoryColor(noiseReducedImg,stonePosition)
+cv2.imshow("resultWithNoiceReducedImg",resultWithNoiceReducedImg)
+cv2.waitKey(0)
+cv2.imwrite('./Results/resultWithNoiceReducedIMG.png', resultWithNoiceReducedImg)
+
+# 結果
 resultImg = MOD.drawTerritoryColor(boardImg,stonePosition)
 cv2.imshow("resultImg",resultImg)
 cv2.waitKey(0)
