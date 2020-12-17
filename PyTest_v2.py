@@ -109,8 +109,6 @@ with open('./Results/stonePosition.csv', 'w', newline="") as f:
     writer = csv.writer(f)
     writer.writerows(stonePosition)
 
-# print("stonePosition: \n" + str(stonePosition).replace("], [","], \n[") + "\n")
-
 # 結果
 resultImg = MOD.drawTerritoryColor(boardImg,stonePosition)
 cv2.imshow("resultImg",resultImg)
@@ -120,34 +118,13 @@ cv2.imwrite('./Results/resultIMG.png', resultImg)
 print("END")
 
 '''
-
-# 偽の碁盤情報（四隅の情報が違う）を用意、stonePositionと比較
-dummy = [
-["W", "B", "B", "W", "W", "N", "N", "N", "N", "N", "N", "N", "N", "N", "W", "W", "W", "W", "W"], 
-["N", "B", "W", "W", "N", "W", "N", "N", "N", "N", "N", "W", "W", "N", "W", "B", "W", "B", "B"], 
-["N", "B", "W", "B", "W", "W", "N", "N", "N", "W", "W", "B", "W", "W", "B", "B", "B", "B", "N"], 
-["N", "N", "B", "B", "B", "W", "W", "W", "W", "B", "B", "B", "W", "B", "B", "B", "B", "N", "N"], 
-["N", "N", "B", "W", "W", "B", "B", "B", "B", "B", "N", "B", "W", "B", "W", "W", "B", "N", "N"], 
-["N", "N", "B", "W", "W", "W", "B", "W", "B", "W", "B", "N", "B", "B", "W", "W", "B", "N", "N"], 
-["N", "N", "N", "B", "B", "W", "W", "W", "W", "W", "B", "B", "W", "W", "W", "B", "N", "N", "N"], 
-["N", "N", "B", "B", "W", "N", "W", "B", "B", "B", "B", "B", "W", "B", "W", "B", "B", "B", "B"], 
-["N", "N", "B", "W", "W", "N", "W", "B", "B", "W", "W", "B", "W", "B", "W", "W", "B", "W", "B"], 
-["N", "B", "W", "N", "N", "N", "W", "W", "B", "B", "W", "B", "B", "B", "B", "W", "B", "W", "W"], 
-["N", "B", "W", "N", "N", "N", "W", "B", "B", "B", "W", "W", "W", "W", "W", "B", "N", "W", "N"], 
-["B", "B", "W", "N", "N", "W", "B", "B", "W", "W", "N", "N", "N", "N", "N", "N", "W", "N", "N"], 
-["W", "B", "W", "W", "W", "W", "W", "W", "W", "B", "N", "N", "N", "N", "N", "W", "B", "W", "W"], 
-["W", "W", "W", "B", "B", "B", "W", "B", "B", "W", "W", "N", "N", "N", "N", "W", "B", "W", "W"], 
-["N", "W", "B", "B", "B", "B", "B", "N", "B", "W", "W", "N", "N", "N", "W", "B", "B", "B", "W"], 
-["W", "W", "W", "W", "W", "B", "N", "B", "N", "B", "B", "W", "W", "W", "W", "W", "B", "B", "W"], 
-["B", "W", "B", "W", "W", "B", "N", "W", "B", "B", "B", "W", "B", "B", "W", "W", "W", "B", "B"], 
-["B", "B", "B", "B", "B", "N", "N", "N", "N", "N", "B", "B", "N", "B", "B", "W", "B", "B", "N"], 
-["W", "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "N", "B", "N", "N", "W"]]
-
-# ndarrayを比較演算子で比較すると，各要素に対して一致してるかどうかの真理値を返す．
-compare = np.array(stonePosition) == np.array(dummy)    
-# 比較結果を画像に重ねる．
-resultDummyCompare = MOD.drawCompareStone(boardImg, compare)
-cv2.imshow("compare", resultDummyCompare)
-cv2.waitKey(0)
-
+with open('./Results/dummyPosition.csv', 'r', newline="") as f: # 偽の碁盤情報をdummyPosition.csvから取得，比較を行う
+    reader = csv.reader(f)
+    l = [row for row in reader]
+    # ndarrayを比較演算子で比較すると，各要素に対して一致してるかどうかの真理値を返す．
+    compare = np.array(stonePosition) == np.array(l)    
+    # 比較結果を画像に重ねる．
+    resultDummyCompare = MOD.drawCompareStone(boardImg, compare)
+    cv2.imshow("compare", resultDummyCompare)
+    cv2.waitKey(0)
 '''
