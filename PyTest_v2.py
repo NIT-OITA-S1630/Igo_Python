@@ -12,13 +12,15 @@ else : os.system("clear")
 #           --- 処理開始 ---
 
 # ファイル指定と、指定ファイルの表示
-originalImg = cv2.imread("./Input_IMG/DSC_0041.jpg")
+# originalImg = cv2.imread("./Input_IMG/DSC_0041.jpg")
+originalImg = cv2.imread("./Input_IMG/DSC_0170.jpg")
 cv2.namedWindow("originalImg", cv2.WINDOW_NORMAL)   # 画像がデカすぎるので縮小表示用
 cv2.imshow("originalImg",originalImg)
 cv2.waitKey(0)
 
 # 座標指定：[左上],[右上],[右下],[左下]
-pts = np.array([[1126,250],[2735,105],[2745,1818],[1103,1711]], np.int32)
+pts = np.array([[]], np.int32)
+# pts = np.array([[1126,250],[2735,105],[2745,1818],[1103,1711]], np.int32)
 cornerOfGoBoard = np.float32(pts) # float32に型変換。透視変換行列の計算で必要になる。
 cornerOfImage = np.float32([[0,0], [800,0], [800,800], [0, 800]])
 
@@ -45,7 +47,7 @@ cv2.imwrite('./Results/boardWithPointsImg.png', boardWithPointsImg)
 
 # ノイズ処理
 # noiseReducedImg = MOD.reduceNoise(boardImg, 37, 0)
-noiseReducedImg = cv2.medianBlur(boardImg,27)
+noiseReducedImg = cv2.GaussianBlur(boardImg,(11,11),0)
 cv2.imshow("noiseReducedImg",noiseReducedImg)
 cv2.waitKey(0)
 cv2.imwrite('./Results/noiseReducedImg.png', noiseReducedImg)
