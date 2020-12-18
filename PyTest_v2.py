@@ -12,7 +12,7 @@ else : os.system("clear")
 #           --- 処理開始 ---
 
 # ファイル指定と、指定ファイルの表示
-originalImg = cv2.imread("./Input_IMG/DSC_0170.jpg")
+originalImg = cv2.imread("./Input_IMG/DSC_0087.jpg")
 cv2.namedWindow("originalImg", cv2.WINDOW_NORMAL)   # 画像がデカすぎるので縮小表示用
 cv2.imshow("originalImg",originalImg)
 cv2.waitKey(0)
