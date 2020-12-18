@@ -45,8 +45,13 @@ cv2.waitKey(0)
 cv2.imwrite('./Results/boardWithPointsImg.png', boardWithPointsImg)
 
 # ノイズ処理
+kernelSize = 15
 # noiseReducedImg = MOD.reduceNoise(boardImg, 37, 0)
-noiseReducedImg = cv2.GaussianBlur(boardImg,(11,11),0)
+
+# noiseReducedImg = cv2.GaussianBlur(boardImg,(kernelSize,kernelSize),0)
+# noiseReducedImg = cv2.blur(boardImg,(kernelSize,kernelSize))
+noiseReducedImg = cv2.medianBlur(boardImg,kernelSize)
+
 cv2.imshow("noiseReducedImg",noiseReducedImg)
 cv2.waitKey(0)
 cv2.imwrite('./Results/noiseReducedImg.png', noiseReducedImg)
