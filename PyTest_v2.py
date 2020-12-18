@@ -74,12 +74,12 @@ cv2.imwrite('./Results/GRAYImg.png', GRAYImg)
 lower_BLACK = np.array([0,0,0])      # 閾値の下限
 upper_BLACK = np.array([360,100,100])    # 閾値の上限
 
-mask_BLACK = cv2.inRange(GRAYImg, 0, 50)    # 黒石抽出
+mask_BLACK = cv2.inRange(GRAYImg, 0, 50)    # 黒石抽出 0～50
 cv2.imshow("mask_BLACK",mask_BLACK)
 cv2.waitKey(0)
 cv2.imwrite('./Results/mask_BLACK.png', mask_BLACK)
 
-mask_WHITE = cv2.inRange(GRAYImg, 160, 255)    # 黒石抽出
+mask_WHITE = cv2.inRange(GRAYImg, 160, 255)    # 白石抽出 160～255
 cv2.imshow("mask_WHITE",mask_WHITE)
 cv2.waitKey(0)
 cv2.imwrite('./Results/mask_WHITE.png', mask_WHITE)
