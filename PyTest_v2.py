@@ -12,13 +12,27 @@ else : os.system("clear")
 #           --- 処理開始 ---
 
 # ファイル指定と、指定ファイルの表示
-filename = "DSC_0041" # ファイル名指定
+filename = "DSC_0099" # ファイル名指定
+
+
+
+
+
+
 
 if not(os.path.exists("./Results/"+filename)): os.makedirs("./Results/"+filename)   # ファイル名のディレクトリを作る（画像ごとにいちいち座標とか再設定するのが面倒になった）
 originalImg = cv2.imread("./Input_IMG/"+filename+".jpg")
 
 # 画像名のディレクトリにあるptlist.txtをもとに切り抜く四隅を指定（座標指定：[左上],[右上],[右下],[左下]）
-ptlist=[]   
+ptlist=[]
+if not(os.path.exists('./Results/'+filename+'/ptlist.txt')): 
+    path = './Results/'+filename+'/ptlist.txt'
+    f = open(path, 'w')
+    f.write('')  # 何も書き込まなくてファイルは作成されました
+    f.close()
+    print("WARNING: ./Results/"+filename+"/ptlist.txt generated.")
+    quit()
+
 for l in open('./Results/'+filename+'/ptlist.txt').readlines():
     data = l[:-1].split(',')
     ptlist += [[int(data[0]),int(data[1])]]
@@ -132,29 +146,33 @@ cv2.imwrite('./Results/' + filename + '/result.png', result)
 # cv2.imwrite('./Results/' + filename + '/resultIMG.png', resultImg)
 
 
+if not(os.path.exists('./Results/' + filename + '/' + filename + '.csv')): 
+    path = './Results/' + filename + '/' + filename + '.csv'
+    f = open(path, 'w')
+    f.write('')  # 何も書き込まなくてファイルは作成されました
+    f.close()
+    print("WARNING: ./Results/" + filename + '/' + filename + '.csv generated!')
 
-# dummyPosition.csvに，正常な碁石の配置を記録しておくことで，一致した確率が求められる．
-with open('./Results/' + filename + '.csv', 'r', newline="") as f: # 偽の碁盤情報をdummyPosition.csvから取得，比較を行う
+    # ファイル名.csvに，正常な碁石の配置を記録しておくことで，一致した確率が求められる．
+with open('./Results/' + filename + '/' + filename + '.csv', 'r', newline="") as f: # 偽の碁盤情報をdummyPosition.csvから取得，比較を行う
     reader = csv.reader(f)
     l = [row for row in reader]
     # ndarrayを比較演算子で比較すると，各要素に対して一致してるかどうかの真理値を返す．
 
-    # dummyPosition.csv上の石の数
-    BLACK_r = 0
-    WHITE_r = 0
-    for R_record in l: 
-        BLACK_r += R_record.count('B')
-        WHITE_r += R_record.count('W')
+    # csv上の石の数
+    BLACK_c = 0
+    WHITE_c = 0
+    for R_csv in l: 
+        BLACK_c += R_csv.count('B')
+        WHITE_c += R_csv.count('W')
 
-    # システムが検知した石の検知数
+    # システムが検知(detect)した石の検知数
     BLACK_d = 0
     WHITE_d = 0
     for R_detected in stonePosition_NoMask:
         BLACK_d += R_detected.count('B')
         WHITE_d += R_detected.count('W')
 
-    print("BLACK_r="+str(BLACK_r))
-    print("WHITE_r="+str(WHITE_r))
     # compare = np.array(stonePosition_NoMask) == np.array(l)    
     # # 比較結果を画像に重ねる．
     # resultDummyCompare = MOD.drawCompareStone(boardImg, compare)
