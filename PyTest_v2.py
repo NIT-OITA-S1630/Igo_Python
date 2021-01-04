@@ -149,14 +149,12 @@ with open('./Results/' + filename + '/' + filename + '.csv', 'r', newline="") as
         BLACK_d += R_detected.count('B')
         WHITE_d += R_detected.count('W')
 
-    print("[REPORT]")
-    print("\tBLACK_Threshold = " + str(threshold_black))
-
     # # 比較結果を画像に重ねる．
     compare = np.array(stonePosition_NoMask) == np.array(l)
     # print(compare)
     resultCompare = MOD.drawCompareStone(boardImg, compare)
     cv2.imshow("compare", resultCompare)
     cv2.waitKey(0)
+    cv2.imwrite('./Results/' + filename + '/resultCompare.jpg', resultCompare)
 
 print("END")
