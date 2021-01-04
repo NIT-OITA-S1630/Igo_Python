@@ -74,13 +74,12 @@ def drawXP_Rect(img):
 
     return outputImg
 
+
 # 石の位置・種類の判別
-def checkStonePosition(img):
+def checkStonePosition(img, threshold_black, threshold_white):
     crossPoints = retCrossPoints(img)
     conditionOfBoard = []
     none = 10.0
-    blackStone = 60.0
-    whiteStone = 160.0
 
     for p_row in crossPoints:
         condition_row = []
@@ -98,12 +97,12 @@ def checkStonePosition(img):
             # 「目標の交点の、その周囲のRGB値の平均」(colorAve)が閾値を下回ってるかどうかで、石の有無を判別
             if colorAve < none: # 明るさ平均がnone（上で宣言）以下→"N"を付与
                 condition_row.append("N")
-            elif colorAve < blackStone: # 明るさ平均がblackStone（上で宣言）以下→"B"を付与
+            elif colorAve < threshold_black: # 明るさ平均がblackStone（上で宣言）以下→"B"を付与
                 condition_row.append("B")
-            elif colorAve > whiteStone:
+            elif colorAve > threshold_white:
                 condition_row.append("W") # 明るさ平均がwhiteStone（上で宣言）以下→"W"を付与
             else:
-                condition_row.append(colorAve)
+                condition_row.append("U")
         conditionOfBoard.append(condition_row)
 
     # これに石の情報があった！！
