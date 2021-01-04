@@ -79,8 +79,8 @@ def checkStonePosition(img):
     crossPoints = retCrossPoints(img)
     conditionOfBoard = []
     none = 10.0
-    blackStone = 80.0
-    whiteStone = 120.0
+    blackStone = 60.0
+    whiteStone = 160.0
 
     for p_row in crossPoints:
         condition_row = []
@@ -96,12 +96,14 @@ def checkStonePosition(img):
             # print('colorAve' + "["+str(crossPoints.index(p_row)+1)+", "+str(p_row.index(p)+1)+"]" + ':' +str(colorAve))
             
             # 「目標の交点の、その周囲のRGB値の平均」(colorAve)が閾値を下回ってるかどうかで、石の有無を判別
-            if colorAve < none:
+            if colorAve < none: # 明るさ平均がnone（上で宣言）以下→"N"を付与
                 condition_row.append("N")
-            elif colorAve < blackStone:
+            elif colorAve < blackStone: # 明るさ平均がblackStone（上で宣言）以下→"B"を付与
                 condition_row.append("B")
             elif colorAve > whiteStone:
-                condition_row.append("W")  
+                condition_row.append("W") # 明るさ平均がwhiteStone（上で宣言）以下→"W"を付与
+            else:
+                condition_row.append(colorAve)
         conditionOfBoard.append(condition_row)
 
     # これに石の情報があった！！
@@ -123,6 +125,8 @@ def drawTerritoryColor(img,territoryTable):
                 cv2.drawMarker(outputImg, (p[0],p[1]), (255, 0, 0), cv2.MARKER_TILTED_CROSS, 10, 2)
             elif state=="N":
                 cv2.drawMarker(outputImg, (p[0],p[1]), (0, 255, 0), cv2.MARKER_CROSS, 10)
+            else:
+                cv2.drawMarker(outputImg, (p[0],p[1]), (0, 255, 255), cv2.MARKER_CROSS, 10)
             j += 1
         i += 1
     return outputImg

@@ -12,14 +12,14 @@ else : os.system("clear")
 #           --- 処理開始 ---
 
 # ファイル指定と、指定ファイルの表示
-originalImg = cv2.imread("./Input_IMG/DSC_0087.jpg")
+originalImg = cv2.imread("./Input_IMG/DSC_0041.jpg")
+# 座標指定：[左上],[右上],[右下],[左下]
+ptlist = [1125,249],[2734,105],[2744,1822],[1101,1717]
 cv2.namedWindow("originalImg", cv2.WINDOW_NORMAL)   # 画像がデカすぎるので縮小表示用
 cv2.imshow("originalImg",originalImg)
 cv2.waitKey(0)
 
-# 座標指定：[左上],[右上],[右下],[左下]
-pts = np.array([[1043,170],[2749,170],[2755,1822],[947,1772]], np.int32)
-# pts = np.array([[1126,250],[2735,105],[2745,1818],[1103,1711]], np.int32)
+pts = np.array(ptlist, np.int32)
 cornerOfGoBoard = np.float32(pts) # float32に型変換。透視変換行列の計算で必要になる。
 cornerOfImage = np.float32([[0,0], [800,0], [800,800], [0, 800]])
 
@@ -38,42 +38,31 @@ cv2.imshow("Results/boardImg",boardImg)
 cv2.waitKey(0)
 cv2.imwrite('./Results/boardImg.png', boardImg)
 
-# 交点付与
-boardWithPointsImg = MOD.drawCrossPoints(boardImg)
-cv2.imshow("boardWithPointsImg",boardWithPointsImg)
-cv2.waitKey(0)
-cv2.imwrite('./Results/boardWithPointsImg.png', boardWithPointsImg)
-
-# ノイズ処理
-kernelSize = 15
-# noiseReducedImg = MOD.reduceNoise(boardImg, 37, 0)
-
-# noiseReducedImg = cv2.GaussianBlur(boardImg,(kernelSize,kernelSize),0)
-# noiseReducedImg = cv2.blur(boardImg,(kernelSize,kernelSize))
-noiseReducedImg = cv2.medianBlur(boardImg,kernelSize)
-
-cv2.imshow("noiseReducedImg",noiseReducedImg)
-cv2.waitKey(0)
-cv2.imwrite('./Results/noiseReducedImg.png', noiseReducedImg)
-
-# # 確認用の表示(BGR→HSV変換)
-# hsvImg = cv2.cvtColor(noiseReducedImg, cv2.COLOR_BGR2HSV)
-# cv2.imshow("hsvImg",hsvImg)
-# cv2.waitKey(0)
-# cv2.imwrite('./Results/hsvImg.png', hsvImg)
-
-# 確認用の表示(BGR→HSV変換)
-GRAYImg = cv2.cvtColor(noiseReducedImg, cv2.COLOR_BGR2GRAY)
+# BGR→GRAY変換
+GRAYImg = cv2.cvtColor(boardImg, cv2.COLOR_BGR2GRAY)
 cv2.imshow("GRAYImg",GRAYImg)
 cv2.waitKey(0)
 cv2.imwrite('./Results/GRAYImg.png', GRAYImg)
 
-#マスク
-# beige = np.uint8([[[61,91,146]]])                   # これ使われてない
-# hsv_beige = cv2.cvtColor(beige,cv2.COLOR_BGR2HSV)   # これ使われてない……
-lower_BLACK = np.array([0,0,0])      # 閾値の下限
-upper_BLACK = np.array([360,100,100])    # 閾値の上限
+# ノイズ処理
+kernelSize = 25
+noiseReducedImg = cv2.medianBlur(GRAYImg,kernelSize)
+cv2.imshow("noiseReducedImg",noiseReducedImg)
+cv2.waitKey(0)
+cv2.imwrite('./Results/noiseReducedImg.png', noiseReducedImg)
 
+# 結果に重ねる用の，カラー画像に変換したnoiseReducedImg(GRAY)
+GRAY_to_COLOR = cv2.cvtColor(noiseReducedImg, cv2.COLOR_GRAY2BGR)
+
+# 交点付与（これ自体はなくてもいいが，取得領域の確認用）
+boardWithPointsImg = MOD.drawXP_Rect(GRAY_to_COLOR)
+cv2.imshow("boardWithPointsImg",boardWithPointsImg)
+cv2.waitKey(0)
+cv2.imwrite('./Results/boardWithPointsImg.png', boardWithPointsImg)
+
+
+# ――マスク処理編――
+'''
 mask_BLACK = cv2.inRange(GRAYImg, 0, 50)    # 黒石抽出 0～50
 cv2.imshow("mask_BLACK",mask_BLACK)
 cv2.waitKey(0)
@@ -102,13 +91,7 @@ cv2.waitKey(0)
 cv2.imwrite('./Results/res.png', res)
 
 
-# resに点を付与
-resWithPointsImg = MOD.drawXP_Rect(res)
-cv2.imshow("resWithPointsImg",resWithPointsImg)
-cv2.waitKey(0)
-cv2.imwrite('./Results/resWithPointsImg.png', resWithPointsImg)
-
-stonePosition = MOD.checkStonePosition(res)
+stonePosition = MOD.checkStonePosition(res) # resはマスク付き, noiseReducedImgと比較しろ
 # print(re.sub("[|[[|]|]|],", "", str(stonePosition).replace("], [","], \n[")))
 # stonePosition の情報を.csvに保存
 with open('./Results/stonePosition.csv', 'w', newline="") as f:
@@ -116,16 +99,27 @@ with open('./Results/stonePosition.csv', 'w', newline="") as f:
     writer.writerows(stonePosition)
 
 # 結果
-resultWithNoiceReducedImg = MOD.drawTerritoryColor(noiseReducedImg,stonePosition)
-cv2.imshow("resultWithNoiceReducedImg",resultWithNoiceReducedImg)
+resultWithNoiseReducedImg = MOD.drawTerritoryColor(res,stonePosition)
+cv2.imshow("resultWithNoiseReducedImg",resultWithNoiseReducedImg)
 cv2.waitKey(0)
-cv2.imwrite('./Results/resultWithNoiceReducedIMG.png', resultWithNoiceReducedImg)
+cv2.imwrite('./Results/resultWithNoiseReducedIMG.png', resultWithNoiseReducedImg)
+'''
+stonePosition_NoMask = MOD.checkStonePosition(noiseReducedImg) 
+result_noiseReduced = MOD.drawTerritoryColor(GRAY_to_COLOR,stonePosition_NoMask)
+cv2.imshow("result_noiseReduced",result_noiseReduced)
+cv2.waitKey(0)
+cv2.imwrite('./Results/result_noiseReduced.png', result_noiseReduced)
+
+result = MOD.drawTerritoryColor(boardImg,stonePosition_NoMask)
+cv2.imshow("result",result)
+cv2.waitKey(0)
+cv2.imwrite('./Results/result.png', result)
 
 # 結果
-resultImg = MOD.drawTerritoryColor(boardImg,stonePosition)
-cv2.imshow("resultImg",resultImg)
-cv2.waitKey(0)
-cv2.imwrite('./Results/resultIMG.png', resultImg)
+# resultImg = MOD.drawTerritoryColor(boardImg,stonePosition)
+# cv2.imshow("resultImg",resultImg)
+# cv2.waitKey(0)
+# cv2.imwrite('./Results/resultIMG.png', resultImg)
 
 print("END")
 
