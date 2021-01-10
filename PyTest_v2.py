@@ -12,13 +12,14 @@ else : os.system("clear")
 #           --- 処理開始 ---
 
 # ファイル指定と、指定ファイルの表示
-filename = "DSC_0099" # ファイル名指定
+filename = "DSC_0100" # ファイル名指定
 
 
 print("FILE = " + filename)
 
-threshold_black = 60.0
-threshold_white = 160.0
+threshold_black = 0
+threshold_white = int(input())
+# print("Threshold_black = " + str(threshold_black))
 
 
 
@@ -51,61 +52,62 @@ cornerOfImage = np.float32([[0,0], [800,0], [800,800], [0, 800]])
 cornerImg = MOD.drawCorner(originalImg,pts)
 for p in pts:
     cv2.drawMarker(cornerImg, (p[0],p[1]), (0, 255, 0), cv2.MARKER_TILTED_CROSS, 50, 10)
-cv2.namedWindow("cornerImg", cv2.WINDOW_NORMAL)
-cv2.imshow("cornerImg",cornerImg)
-cv2.waitKey(0)
+# cv2.namedWindow("cornerImg", cv2.WINDOW_NORMAL)
+# cv2.imshow("cornerImg",cornerImg)
+# cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/cornerImg.jpg', cornerImg)
 
 # 透視変換(Perspective Transform)
 boardImg = MOD.perspectiveTransform(originalImg, cornerOfGoBoard, cornerOfImage)
-cv2.imshow("Results/boardImg",boardImg)
-cv2.waitKey(0)
+# cv2.imshow("Results/boardImg",boardImg)
+# cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/boardImg.jpg', boardImg)
 
 # BGR→GRAY変換
 GRAYImg = cv2.cvtColor(boardImg, cv2.COLOR_BGR2GRAY)
-cv2.imshow("GRAYImg",GRAYImg)
-cv2.waitKey(0)
+# cv2.imshow("GRAYImg",GRAYImg)
+# cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/GRAYImg.jpg', GRAYImg)
 
 # ノイズ処理
 kernelSize = 25
 noiseReducedImg = cv2.medianBlur(GRAYImg,kernelSize)
-cv2.imshow("noiseReducedImg",noiseReducedImg)
-cv2.waitKey(0)
+# cv2.imshow("noiseReducedImg",noiseReducedImg)
+# cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/noiseReducedImg.jpg', noiseReducedImg)
 
 # 結果に重ねる用の，カラー画像に変換したnoiseReducedImg(GRAY)
 GRAY_to_COLOR_noiseReduced = cv2.cvtColor(noiseReducedImg, cv2.COLOR_GRAY2BGR)
+GRAY_to_COLOR = cv2.cvtColor(GRAYImg,cv2.COLOR_GRAY2BGR)
 
 
 # 交点付与（これ自体はなくてもいいが，取得領域の確認用）
 boardWithAreaImg = MOD.drawXP_Rect(GRAY_to_COLOR_noiseReduced)
-cv2.imshow("boardWithAreaImg",boardWithAreaImg)
-cv2.waitKey(0)
+# cv2.imshow("boardWithAreaImg",boardWithAreaImg)
+# cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/boardWithAreaImg.jpg', boardWithAreaImg)
 
 color_boardWithAreaImg = MOD.drawXP_Rect(boardImg)
-cv2.imshow("color_boardWithAreaImg",color_boardWithAreaImg)
-cv2.waitKey(0)
+# cv2.imshow("color_boardWithAreaImg",color_boardWithAreaImg)
+# cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/color_boardWithAreaImg.jpg', color_boardWithAreaImg)
 
 # 石の有無を計算
 stonePosition_NoMask = MOD.checkStonePosition(noiseReducedImg, threshold_black, threshold_white) 
 # noiseReducedに重ねて計算結果を表示
 result_noiseReduced = MOD.drawTerritoryColor(GRAY_to_COLOR_noiseReduced,stonePosition_NoMask)
-cv2.imshow("result_noiseReduced",result_noiseReduced)
-cv2.waitKey(0)
+# cv2.imshow("result_noiseReduced",result_noiseReduced)
+# cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/result_noiseReduced.jpg', result_noiseReduced)
 
 # 盤面画像に重ねて計算結果を表示
-result = MOD.drawTerritoryColor(boardImg,stonePosition_NoMask)
+result = MOD.drawTerritoryColor(GRAY_to_COLOR,stonePosition_NoMask)
 cv2.imshow("result",result)
 cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/result.jpg', result)
 
 # 結果
-# resultImg = MOD.drawTerritoryColor(boardImg,stonePosition)
+# resultImg = MOD.drawTerritoryColor(GRAY_to_COLOR,stonePosition)
 # cv2.imshow("resultImg",resultImg)
 # cv2.waitKey(0)
 # cv2.imwrite('./Results/' + filename + '/resultIMG.jpg', resultImg)
@@ -138,23 +140,24 @@ with open('./Results/' + filename + '/' + filename + '.csv', 'r', newline="") as
     # csv上の石の数
     BLACK_c = 0
     WHITE_c = 0
+    BLACK_d = 0
+    WHITE_d = 0
+
     for R_csv in l: 
         BLACK_c += R_csv.count('B')
         WHITE_c += R_csv.count('W')
 
     # システムが検知(detect)した石の検知数
-    BLACK_d = 0
-    WHITE_d = 0
     for R_detected in stonePosition_NoMask:
         BLACK_d += R_detected.count('B')
         WHITE_d += R_detected.count('W')
 
+    print("WHITE_Diff = "+str(WHITE_d-WHITE_c))
     # # 比較結果を画像に重ねる．
     compare = np.array(stonePosition_NoMask) == np.array(l)
     # print(compare)
     resultCompare = MOD.drawCompareStone(boardImg, compare)
-    cv2.imshow("compare", resultCompare)
-    cv2.waitKey(0)
+    # cv2.imshow("compare", resultCompare)
+    # cv2.waitKey(0)
     cv2.imwrite('./Results/' + filename + '/resultCompare.jpg', resultCompare)
 
-print("END")
