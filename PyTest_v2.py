@@ -12,13 +12,13 @@ else : os.system("clear")
 #           --- 処理開始 ---
 
 # ファイル指定と、指定ファイルの表示
-filename = "DSC_0100" # ファイル名指定
+filename = str(input()) # ファイル名指定
 
 
 print("FILE = " + filename)
 
-threshold_black = 0
-threshold_white = int(input())
+threshold_black = 58
+threshold_white = 132
 # print("Threshold_black = " + str(threshold_black))
 
 
@@ -152,7 +152,6 @@ with open('./Results/' + filename + '/' + filename + '.csv', 'r', newline="") as
         BLACK_d += R_detected.count('B')
         WHITE_d += R_detected.count('W')
 
-    print("WHITE_Diff = "+str(WHITE_d-WHITE_c))
     # # 比較結果を画像に重ねる．
     compare = np.array(stonePosition_NoMask) == np.array(l)
     # print(compare)
