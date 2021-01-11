@@ -106,6 +106,11 @@ cv2.imshow("result",result)
 cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/result.jpg', result)
 
+inRange_WHITE = cv2.inRange(noiseReducedImg,threshold_white,255)
+cv2.imshow("inRange_WHITE",inRange_WHITE)
+cv2.waitKey(0)
+cv2.imwrite('./Results/' + filename + '/inRange_WHITE.jpg', inRange_WHITE)
+
 # 結果
 # resultImg = MOD.drawTerritoryColor(GRAY_to_COLOR,stonePosition)
 # cv2.imshow("resultImg",resultImg)
