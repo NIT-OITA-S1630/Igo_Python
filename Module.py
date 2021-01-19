@@ -43,9 +43,9 @@ def retCrossPoints(img):
             x = int(i*interval)
             y = int(j*interval)
             if i==0:
-                x += 7   # i=Bのとき、x座標+7    （端だけ交点をずらす）
+                x += 4   # i=Bのとき、x座標+7    （端だけ交点をずらす）
             if j==0:
-                y += 7   # jも同様
+                y += 4   # jも同様
             if i==18:
                 x -= 7  # i=18のとき、x座標-7   （端だけ交点をずらす）
             if j==18:
@@ -70,7 +70,7 @@ def drawXP_Rect(img):
     crossPoints = retCrossPoints(img)    
     for p_row in crossPoints:
         for p in p_row:
-            cv2.rectangle(outputImg, (p[0]-4,p[1]-4),(p[0]+7,p[1]+7),(0,255,0),1)
+            cv2.rectangle(outputImg, (p[0]-8,p[1]-8),(p[0]+20,p[1]+20),(0,255,0),1)
 
     return outputImg
 
