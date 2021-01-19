@@ -17,11 +17,21 @@ filename = str(input()) # ファイル名指定
 print("\n")
 
 print("Input threshold_black (default=58)...")
-threshold_black = int(input())
+threshold_black = str(input())
+if(len(threshold_black)==0):
+    threshold_black=58
+else:
+    threshold_black=int(threshold_black)
+print(threshold_black)
 print("\n")
 
 print("Input threshold_white (default=132)...")
-threshold_white = int(input())
+threshold_white = str(input())
+if(len(threshold_white)==0):
+    threshold_white=132
+else:
+    threshold_white=int(threshold_white)
+print(threshold_white)
 print("\n")
 
 # print("Threshold_black = " + str(threshold_black))
@@ -76,8 +86,10 @@ cv2.imwrite('./Results/' + filename + '/GRAYImg.jpg', GRAYImg)
 
 # ノイズ処理
 kernelSize = 25
-med = cv2.medianBlur(GRAYImg,kernelSize)
-noiseReducedImg = cv2.erode(med,(kernelSize,kernelSize),iterations = 1)
+# noiseReducedImg = cv2.medianBlur(GRAYImg,kernelSize)
+N1 = cv2.dilate(GRAYImg,None,iterations = 2)
+N2 = cv2.erode(N1,None,iterations = 2)
+noiseReducedImg = cv2.medianBlur(N2,kernelSize)
 # cv2.imshow("noiseReducedImg",noiseReducedImg)
 # cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/noiseReducedImg.jpg', noiseReducedImg)
