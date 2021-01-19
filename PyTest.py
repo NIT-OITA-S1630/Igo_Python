@@ -86,14 +86,7 @@ cv2.imwrite('./Results/' + filename + '/GRAYImg.jpg', GRAYImg)
 
 # ノイズ処理
 kernelSize = 25
-<<<<<<< HEAD
-# noiseReducedImg = cv2.medianBlur(GRAYImg,kernelSize)
-N1 = cv2.dilate(GRAYImg,None,iterations = 2)
-N2 = cv2.erode(N1,None,iterations = 2)
-noiseReducedImg = cv2.medianBlur(N2,kernelSize)
-=======
 noiseReducedImg = cv2.medianBlur(GRAYImg,kernelSize)
->>>>>>> origin/master
 # cv2.imshow("noiseReducedImg",noiseReducedImg)
 # cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/noiseReducedImg.jpg', noiseReducedImg)
