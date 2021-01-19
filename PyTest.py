@@ -23,7 +23,6 @@ if(len(threshold_black)==0):
 else:
     threshold_black=int(threshold_black)
 print(threshold_black)
-print("\n")
 
 print("Input threshold_white (default=132)...")
 threshold_white = str(input())
@@ -32,7 +31,6 @@ if(len(threshold_white)==0):
 else:
     threshold_white=int(threshold_white)
 print(threshold_white)
-print("\n")
 
 # print("Threshold_black = " + str(threshold_black))
 
@@ -84,9 +82,17 @@ GRAYImg = cv2.cvtColor(boardImg, cv2.COLOR_BGR2GRAY)
 # cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/GRAYImg.jpg', GRAYImg)
 
+
+kernelSize = 35
+median = cv2.medianBlur(GRAYImg,kernelSize)
+cv2.imwrite('./Results/' + filename + '/median.jpg', median)
+blur = cv2.blur(GRAYImg,(kernelSize,kernelSize))
+cv2.imwrite('./Results/' + filename + '/blur.jpg', blur)
+
 # ノイズ処理
-kernelSize = 25
+
 noiseReducedImg = cv2.medianBlur(GRAYImg,kernelSize)
+# noiseReducedImg = cv2.blur(GRAYImg,(kernelSize,kernelSize))
 # cv2.imshow("noiseReducedImg",noiseReducedImg)
 # cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/noiseReducedImg.jpg', noiseReducedImg)
@@ -117,7 +123,6 @@ cv2.imwrite('./Results/' + filename + '/result_noiseReduced.jpg', result_noiseRe
 
 # 盤面画像に重ねて計算結果を表示
 result = MOD.drawTerritoryColor(GRAY_to_COLOR,stonePosition_NoMask)
-<<<<<<< HEAD
 # cv2.imshow("result",result)
 # cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/result.jpg', result)
@@ -127,16 +132,6 @@ cv2.imwrite('./Results/' + filename + '/result.jpg', result)
 # cv2.imshow("inRange_WHITE",inRange_WHITE)
 # cv2.waitKey(0)
 # cv2.imwrite('./Results/' + filename + '/inRange_WHITE.jpg', inRange_WHITE)
-=======
-cv2.imshow("result",result)
-cv2.waitKey(0)
-cv2.imwrite('./Results/' + filename + '/result.jpg', result)
-
-inRange_WHITE = cv2.inRange(noiseReducedImg,threshold_white,255)
-cv2.imshow("inRange_WHITE",inRange_WHITE)
-cv2.waitKey(0)
-cv2.imwrite('./Results/' + filename + '/inRange_WHITE.jpg', inRange_WHITE)
->>>>>>> origin/master
 
 # 結果
 # resultImg = MOD.drawTerritoryColor(GRAY_to_COLOR,stonePosition)
@@ -192,7 +187,4 @@ with open('./Results/' + filename + '/' + filename + '.csv', 'r', newline="") as
     # cv2.waitKey(0)
     cv2.imwrite('./Results/' + filename + '/resultCompare.jpg', resultCompare)
 
-<<<<<<< HEAD
 print("END")
-=======
->>>>>>> origin/master
