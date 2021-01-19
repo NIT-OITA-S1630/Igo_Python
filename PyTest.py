@@ -86,10 +86,14 @@ cv2.imwrite('./Results/' + filename + '/GRAYImg.jpg', GRAYImg)
 
 # ノイズ処理
 kernelSize = 25
+<<<<<<< HEAD
 # noiseReducedImg = cv2.medianBlur(GRAYImg,kernelSize)
 N1 = cv2.dilate(GRAYImg,None,iterations = 2)
 N2 = cv2.erode(N1,None,iterations = 2)
 noiseReducedImg = cv2.medianBlur(N2,kernelSize)
+=======
+noiseReducedImg = cv2.medianBlur(GRAYImg,kernelSize)
+>>>>>>> origin/master
 # cv2.imshow("noiseReducedImg",noiseReducedImg)
 # cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/noiseReducedImg.jpg', noiseReducedImg)
@@ -120,6 +124,7 @@ cv2.imwrite('./Results/' + filename + '/result_noiseReduced.jpg', result_noiseRe
 
 # 盤面画像に重ねて計算結果を表示
 result = MOD.drawTerritoryColor(GRAY_to_COLOR,stonePosition_NoMask)
+<<<<<<< HEAD
 # cv2.imshow("result",result)
 # cv2.waitKey(0)
 cv2.imwrite('./Results/' + filename + '/result.jpg', result)
@@ -129,6 +134,16 @@ cv2.imwrite('./Results/' + filename + '/result.jpg', result)
 # cv2.imshow("inRange_WHITE",inRange_WHITE)
 # cv2.waitKey(0)
 # cv2.imwrite('./Results/' + filename + '/inRange_WHITE.jpg', inRange_WHITE)
+=======
+cv2.imshow("result",result)
+cv2.waitKey(0)
+cv2.imwrite('./Results/' + filename + '/result.jpg', result)
+
+inRange_WHITE = cv2.inRange(noiseReducedImg,threshold_white,255)
+cv2.imshow("inRange_WHITE",inRange_WHITE)
+cv2.waitKey(0)
+cv2.imwrite('./Results/' + filename + '/inRange_WHITE.jpg', inRange_WHITE)
+>>>>>>> origin/master
 
 # 結果
 # resultImg = MOD.drawTerritoryColor(GRAY_to_COLOR,stonePosition)
@@ -184,4 +199,7 @@ with open('./Results/' + filename + '/' + filename + '.csv', 'r', newline="") as
     # cv2.waitKey(0)
     cv2.imwrite('./Results/' + filename + '/resultCompare.jpg', resultCompare)
 
+<<<<<<< HEAD
 print("END")
+=======
+>>>>>>> origin/master
