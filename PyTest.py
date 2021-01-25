@@ -24,10 +24,10 @@ else:
     threshold_black=int(threshold_black)
 print(threshold_black)
 
-print("Input threshold_white (default=132)...")
+print("Input threshold_white (default=158)...")
 threshold_white = str(input())
 if(len(threshold_white)==0):
-    threshold_white=132
+    threshold_white=158
 else:
     threshold_white=int(threshold_white)
 print(threshold_white)
@@ -115,6 +115,7 @@ cv2.imwrite('./Results/' + filename + '/color_boardWithAreaImg.jpg', color_board
 
 # 石の有無を計算
 stonePosition_NoMask = MOD.checkStonePosition(noiseReducedImg, threshold_black, threshold_white) 
+stonePosition_NoMask_ALT = MOD.checkStonePosition_ALT(noiseReducedImg, threshold_black, threshold_white) 
 # noiseReducedに重ねて計算結果を表示
 result_noiseReduced = MOD.drawTerritoryColor(GRAY_to_COLOR_noiseReduced,stonePosition_NoMask)
 # cv2.imshow("result_noiseReduced",result_noiseReduced)
@@ -154,9 +155,15 @@ if not(os.path.exists('./Results/' + filename + '/' + filename + '.csv')):
     print("WARNING: ./Results/" + filename + '/' + filename + '.csv generated!')
 
 
-with open('./Results/' + filename + '/stonePosition.csv', 'w', newline="") as file: # 偽の碁盤情報をdummyPosition.csvから取得，比較を行う
+with open('./Results/' + filename + '/stonePosition.csv', 'w', newline="") as file: # CSVに書き込み
     writer = csv.writer(file, lineterminator='\n')
     writer.writerows(stonePosition_NoMask)
+
+with open('./Results/' + filename + '/stonePosition_ALT.csv', 'w', newline="") as file: # CSVに書き込み
+    writer = csv.writer(file, lineterminator='\n')
+    writer.writerows(stonePosition_NoMask_ALT)
+
+
 
     # ファイル名.csvに，正常な碁石の配置を記録しておくことで，一致した確率が求められる．
 with open('./Results/' + filename + '/' + filename + '.csv', 'r', newline="") as f: # 偽の碁盤情報をdummyPosition.csvから取得，比較を行う

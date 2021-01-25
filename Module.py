@@ -109,6 +109,25 @@ def checkStonePosition(img, threshold_black, threshold_white):
     # print(conditionOfBoard)
     return conditionOfBoard
 
+def checkStonePosition_ALT(img, threshold_black, threshold_white):
+    crossPoints = retCrossPoints(img)
+    conditionOfBoard = []
+
+    for p_row in crossPoints:
+        condition_row = []
+        for p in p_row:
+            rect = img[p[1]-3:p[1]+7, p[0]-3:p[0]+7]
+
+            # rect（=緑枠内の全ピクセルのBGR）の平均値を取得
+            colorAve = np.average(rect)
+            condition_row.append(colorAve)
+        conditionOfBoard.append(condition_row)
+
+    # これに石の情報があった！！
+    # print(conditionOfBoard)
+    return conditionOfBoard
+
+
 # checkStonePositionの石情報リストをもとに、画像上に点を付与する。
 def drawTerritoryColor(img,territoryTable):
     outputImg = img.copy()
