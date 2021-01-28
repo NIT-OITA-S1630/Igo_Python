@@ -129,7 +129,7 @@ result = MOD.drawTerritoryColor(GRAY_to_COLOR,stonePosition_NoMask)
 cv2.imwrite('./Results/' + filename + '/result.jpg', result)
 
 #! 白のしきい値が拾ってる範囲を図に
-# inRange_WHITE = cv2.inRange(noiseReducedImg,threshold_white,255)
+inRange_WHITE = cv2.inRange(noiseReducedImg,threshold_white,255)
 # cv2.imshow("inRange_WHITE",inRange_WHITE)
 # cv2.waitKey(0)
 # cv2.imwrite('./Results/' + filename + '/inRange_WHITE.jpg', inRange_WHITE)
@@ -193,5 +193,34 @@ with open('./Results/' + filename + '/' + filename + '.csv', 'r', newline="") as
     # cv2.imshow("compare", resultCompare)
     # cv2.waitKey(0)
     cv2.imwrite('./Results/' + filename + '/resultCompare.jpg', resultCompare)
+
+kernel_high_pass = np.array([
+                            [-1, -1, -1],
+                            [-1,  8, -1],
+                            [-1, -1, -1]
+                            ], np.float32)
+
+img_high_pass = cv2.filter2D(GRAYImg, -1, kernel_high_pass)
+cv2.imwrite('./Results/' + filename + '/HighPass.jpg', img_high_pass)
+
+cimg = cv2.cvtColor(inRange_WHITE,cv2.COLOR_GRAY2BGR)
+
+circles = cv2.HoughCircles(inRange_WHITE,cv2.HOUGH_GRADIENT,1,20,
+                            param1=50,param2=30,minRadius=0,maxRadius=300)
+
+circles = np.uint16(np.around(circles))
+for i in circles[0,:]:
+    # draw the outer circle
+    cv2.circle(cimg,(i[0],i[1]),i[2],(0,255,0),2)
+    # draw the center of the circle
+    cv2.circle(cimg,(i[0],i[1]),2,(0,0,255),3)
+
+cv2.imwrite('./Results/' + filename + '/detected circles.jpg',cimg)
+
+ret, img_otsu = cv2.threshold(GRAYImg, 0, 255, cv2.THRESH_OTSU)
+cv2.imwrite('./Results/' + filename + '/img_otsu.jpg',img_otsu)
+
+print(ret)
+
 
 print("END")
