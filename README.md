@@ -23,16 +23,16 @@ Python 3.8.5
 
 # Usage
 - `python3 pyTest.py`
-    - Input filename...：Input_IMGに入れた画像名を入力
+    - Input filename...：Input_IMGに入れた画像名(拡張子なし)を入力
         - ファイルが無ければ、プログラムは終了する。
         - 指定したファイルが初めて使用するものであれば、以下の処理を行ってプログラムは終了する
             - RawData/Resultsに、画像名のディレクトリを作成
             - 作成されたディレクトリ内に、ptlist.txtを作成
                 - このtxtには、盤面の左上、右上、右下、左下、の順で座標を書いておく必要がある。
                 - 改行して書くこと（既に作成済みのptlist.txtを参考に）。
-    - Input threshold_black (default=52)
+    - Input threshold_black (default=52)...
         - 黒石のしきい値の指定。何も打たずにEnterを押すと、def_blackの値（この場合52）が適用される
-    - Input threshold_black (default=158)
+    - Input threshold_black (default=158)...
         - 白石のしきい値の指定。何も打たずにEnterを押すと、def_whiteの値（この場合158）が適用される
 
 - 生成されるファイルについて
@@ -50,20 +50,5 @@ Python 3.8.5
 作者を明示する．
 
 # References
-参考にした情報源（サイト・論文）などの情報，リンク
-[1] [READEMEの良さそうな書き方・テンプレート【GitHub/BitBucket】](https://karaage.hatenadiary.jp/entry/2018/01/19/073000)
-
-
-
-
-
-
-
-
-# メモ
----
-- プログラムは殆どが使いまわし。以下参考リンク
-    - 碁盤の状態検出の参考にした
-        - http://asdm.hatenablog.com/entry/2016/07/26/181700
-    - 領域検出（Contour_Detectで実装させてみたやつ。今は後回し。余裕があれば実装したい）
-        - https://qiita.com/hatt_takumi/items/47a46d5e85223a41afa4
+- 色から碁石を識別する方法を実装してた記事
+    - http://asdm.hatenablog.com/entry/2016/07/26/181700
