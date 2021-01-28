@@ -1,3 +1,31 @@
+# Igo-Python
+このソフトはどんなもので，何ができるのかを書く.
+
+# Dependence
+Python 3.8.5  
+必要なパッケージは./Programs/requirements.txtに記述してある。  
+`pip install -r requirements.txt`でまとめてインストールできるはず。
+
+# Setup
+セットアップ方法を書く．用意するハードウェアとソフトウェアをセットアップするためのコマンドを記載する
+
+# Usage
+使い方．なるべく具体的に書く．サンプルも書く
+
+# Authors
+作者を明示する．
+
+# References
+参考にした情報源（サイト・論文）などの情報，リンク
+[1] [READEMEの良さそうな書き方・テンプレート【GitHub/BitBucket】](https://karaage.hatenadiary.jp/entry/2018/01/19/073000)
+
+
+
+
+
+
+
+
 # メモ
 - /Contour_Detect/board_detection.py
     - 碁盤の輪郭を検出して切り取り、あとはPyTest.py(初期ver)と同様の処理を適用。

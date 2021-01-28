@@ -1,0 +1,4 @@
+# 多分これだけで動く……と思う。
+opencv-python
+numpy
+matplotlib
