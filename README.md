@@ -52,8 +52,8 @@
     - result：グレースケール化したboardImg上に、識別結果のマーカーを重ねた
 
 
-# Authors
-橋本 燎(S1630)
+# Author
+- <b><ruby>橋本<rt>はしもと</rt></ruby> 燎</b> (S1630)
 
 # References
 - 色から碁石を識別する方法を実装してた記事
