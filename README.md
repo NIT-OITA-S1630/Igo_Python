@@ -11,7 +11,7 @@
 
 # Dependence
 - Python 3.8.5  
-※WSLのUbuntuに最初から入っていた。`python3`で実行できる  
+※WSL(Windows Subsystem for Linux)のUbuntuに最初から入っていた。`python3`で実行できる  
 （WSLじゃない、Visual StudioのPythonとか、Windowsに直接Pythonを入れるとかの環境で実行確認はしてない）
   
 - 必要なパッケージは、./Programs/requirements.txtに記述してある。  
@@ -53,7 +53,7 @@
 
 
 # Author
-- <b><ruby>橋本<rt>はしもと</rt></ruby> 燎</b> (S1630)
+- <b><ruby>橋本<rt>はしもと</rt></ruby>　<ruby>燎<rt>りょう</rt></ruby></b> (S1630)
 
 # References
 - 色から碁石を識別する方法を実装してた記事
@@ -76,6 +76,6 @@
 
 - Visual Studioはおすすめしない
     - Pythonを使うために最初期にインストールしたが、動作が重い
-    - WSLのPythonを使ってた
+    - 結局WSL上のPythonを使ってた
     - 普通にWindows上にインストールするのもアリ？
         - 参考にしたWebサイトが大体Linuxでの解説だったから、自分はWSLにした。
